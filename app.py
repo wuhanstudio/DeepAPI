@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request, redirect, url_for, jsonify, Response
-from werkzeug.utils import secure_filename
+from flask import Flask, send_from_directory
+from flask import render_template
 
 import keras
 from keras.applications.vgg16 import VGG16, preprocess_input, decode_predictions
@@ -121,6 +122,16 @@ def load_model():
     model = cifar10vgg().model
     # model = VGG16(weights='imagenet', include_top=True)
 
+# Serve the front end
+@app.route("/")
+def index():
+    return send_from_directory('static', "index.html")
+
+@app.route('/<path:path>')
+def send_website(path):
+    print(path)
+    return send_from_directory('static', path)
+
 @app.route('/predict', methods=['GET', 'POST'])
 def upload_file():
     labels = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
@@ -158,4 +169,4 @@ if __name__ == '__main__':
     # no-thread: https://github.com/keras-team/keras/issues/2397#issuecomment-377914683
     # avoid model.predict runs before model initiated
     # To let this run on HEROKU, model.predict should run onece after initialized
-    app.run(host="0.0.0.0",threaded=False)
+    app.run(host="0.0.0.0", port=80, threaded=False)
