@@ -1,37 +1,37 @@
-## Cifar10-VGG Image Classification API Server
+## Image Classification Online (Cifar10-VGG16)
 
-Distributed
+![](demo.gif)
 
 ### Quick Start
 
-docker run
+```
+$ conda env create -f environment.yml
+$ conda activate cloudapi
+$ python app.py
+```
 
-python minimal.py
+Navigate to https://localhost
 
-### Minimal Client
+
+
+### API Client
+
+It's possible to get prediction results by sending a POST request to http://127.0.0.1/predict. 
 
 ```
 def classification(url, file):
-
     # Load the input image and construct the payload for the request
     image = Image.open(file)
     buff = BytesIO()
     image.save(buff, format="JPEG")
 
-    print('Sending requests')
     data = {'file': base64.b64encode(buff.getvalue()).decode("utf-8")}
-    return  requests.post(url, json=data).json()
+    return requests.post(url, json=data).json()
 
 res = classification('http://127.0.0.1/predict', 'cat.jpg')
-
-# Print prediction results
-res = sorted(res['predictions'], key=itemgetter('probability'), reverse=True)
-for i in res:
-    print('{:<15s}{:.5f}'.format(i['label'], i['probability']))
-
 ```
 
-You should see prediction results:
+This python script is available as `test/minimal.py`. You should see prediction results by running `python minimal.py`:
 
 ```
 cat            0.99804
@@ -48,11 +48,13 @@ automobile     0.00001
 
 ### Concurrent client test
 
+Sending 10 concurrent requests to the api server:
+
 ```
-$ python .\client.py 10 .\cat.jpg
+$ python client.py 10 cat.jpg
 ```
 
-The result:
+You should see the result:
 
 ```
 ----- start -----

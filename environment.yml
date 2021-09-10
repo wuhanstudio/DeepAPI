@@ -1,0 +1,17 @@
+name: cloudapi
+channels:
+  - defaults
+dependencies:
+  - pip=21.2.2
+  - python=3.8.0
+  - pip:
+    - flask==2.0.1
+    - grpcio==1.40.0
+    - h5py==3.1.0
+    - keras==2.6.0
+    - keras-preprocessing==1.1.2
+    - numpy==1.19.5
+    - pillow==8.3.2
+    - requests==2.26.0
+    - tensorflow==2.6.0
+    - tensorflow-estimator==2.6.0
