@@ -1,4 +1,8 @@
 
+function refresh() {
+    location.reload();
+};
+
 function recognize() {
     base64str = $('.drag-area img').attr('src');
     base64str = base64str.replace('data:image/jpeg;base64,', '');
