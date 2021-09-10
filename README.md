@@ -14,6 +14,14 @@ Navigate to https://localhost
 
 
 
+### Using Docker
+
+```
+docker run -p 80:80 wuhanstudio/adversarial-classification
+```
+
+
+
 ### API Client
 
 It's possible to get prediction results by sending a POST request to http://127.0.0.1/predict. 
