@@ -1,14 +1,14 @@
-import os
 from flask import Flask, request, redirect, url_for, jsonify, Response
 from flask import Flask, send_from_directory
 from flask import render_template
 
-import keras
 from keras.applications.vgg16 import VGG16, preprocess_input, decode_predictions
-from keras.preprocessing import image
 import numpy as np
 from PIL import Image
-import io
+
+# Data IO and Encoding-Decoding
+from io import BytesIO
+import base64
 
 app = Flask(__name__)
 model = None
@@ -138,7 +138,8 @@ def upload_file():
     response = {'success': False}
     if request.method == 'POST':
         if request.json.get('file'): # image is stored as name "file"
-            img = Image.fromarray( (np.array(request.json['file']) * 255).astype(np.uint8) )
+            img = Image.open(BytesIO(base64.b64decode(request.json.get('file'))))
+            # img = Image.fromarray( (np.array(request.json['file']) * 255).astype(np.uint8) )
             # img = Image.open(io.BytesIO(img_requested))
             if img.mode != 'RGB':
                 img = img.convert('RGB')

@@ -11,11 +11,19 @@ np.set_printoptions(suppress=True)
 
 from PIL import Image
 
+from io import BytesIO
+import base64
+
 def classification(url, file):
+
     # load the input image and construct the payload for the request
     image = Image.open(file)
-    data = {'file': np.asarray(image).tolist()}
+    buff = BytesIO()
+    image.save(buff, format="JPEG")
+
     print('Sending requests')
+    # data = {'file': np.asarray(image).tolist()}
+    data = {'file': base64.b64encode(buff.getvalue()).decode("utf-8")}
     return requests.post(url, json=data).json()
 
 def task(url, file):
@@ -49,7 +57,7 @@ if __name__ == '__main__':
     num_workers = args.num_workers
 
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
-        futures = {executor.submit(task, "http://127.0.0.1:5000/predict", args.image) for i in range(num_workers)}
+        futures = {executor.submit(task, "http://127.0.0.1/predict", args.image) for i in range(num_workers)}
 
         print('----- start -----')
         start_time = time.time()
