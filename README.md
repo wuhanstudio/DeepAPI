@@ -20,15 +20,6 @@ Navigate to https://localhost
 docker run -p 80:80 wuhanstudio/adversarial-classification
 ```
 
-### Deploy to Google Cloud App Engine
-
-```
-# GCP App Engined does not allow access to models on local disk
-# Thus, you need to upload cifar10vgg.h5 to a public avaiable file server
-# Then change MODEL_URL in app.yml to be the download address of your model 
-gcloud app deploy .\app.yml
-```
-
 
 ### API Client
 
