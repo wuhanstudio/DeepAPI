@@ -26,6 +26,7 @@ class cifar10vgg:
 
         self.model = self.build_model()
         self.model.load_weights('cifar10vgg.h5')
+        self.model.summary()
 
     def build_model(self):
         # Build the network of vgg for 10 classes with massive dropout and weight decay as described in the paper.
@@ -134,6 +135,7 @@ def send_website(path):
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
+    global model
     labels = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
     response = {'success': False}
     if request.method == 'POST':
