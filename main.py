@@ -133,14 +133,43 @@ def send_website(path):
     return send_from_directory('static', path)
 
 @app.route('/predict', methods=['GET', 'POST'])
-def upload_file():
+def predict():
     labels = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
     response = {'success': False}
     if request.method == 'POST':
         if request.json.get('file'): # image is stored as name "file"
             img = Image.open(BytesIO(base64.b64decode(request.json.get('file'))))
-            # img = Image.fromarray( (np.array(request.json['file']) * 255).astype(np.uint8) )
-            # img = Image.open(io.BytesIO(img_requested))
+            if img.mode != 'RGB':
+                img = img.convert('RGB')
+            img = img.resize((32, 32))
+            img = np.array(img)
+            img = np.expand_dims(img, axis=0)
+            # inputs = preprocess_input(img)
+            mean = 120.707
+            std = 64.15
+            results = model.predict((img-mean)/(std+1e-7))
+            # results = decode_predictions(results, top=10)
+
+            response['predictions'] = []
+            for i in range(0, 10): # [0] as input is only one image
+                row = {'label': labels[i], 'probability': float(results[0][i])} # numpy float is not good for json
+                response['predictions'].append(row)
+            response['success'] = True
+            return jsonify(response)
+
+    return '''
+    <!doctype html>
+    <title>Wrong Door</title>
+    <h1>You knock the wrong door.</h1>
+    '''
+
+@app.route('/predict_np', methods=['GET', 'POST'])
+def predict_np():
+    labels = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+    response = {'success': False}
+    if request.method == 'POST':
+        if request.json.get('file'): # image is stored as name "file"
+            img = Image.fromarray( (np.array(request.json['file']) * 255).astype(np.uint8) )
             if img.mode != 'RGB':
                 img = img.convert('RGB')
             img = img.resize((32, 32))
@@ -170,4 +199,7 @@ if __name__ == '__main__':
     # no-thread: https://github.com/keras-team/keras/issues/2397#issuecomment-377914683
     # avoid model.predict runs before model initiated
     # To let this run on HEROKU, model.predict should run onece after initialized
-    app.run(host="0.0.0.0", port=80, threaded=False)
+    # app.run(host="0.0.0.0", port=80, threaded=False)
+
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=80, threads=1)
