@@ -10,6 +10,9 @@ from PIL import Image
 from io import BytesIO
 import base64
 
+from keras.utils.data_utils import get_file
+import os
+
 app = Flask(__name__)
 model = None
 
@@ -25,7 +28,16 @@ class cifar10vgg:
         self.x_shape = [32,32,3]
 
         self.model = self.build_model()
-        self.model.load_weights('cifar10vgg.h5')
+
+        if os.getenv("MODEL_URL"):
+            print("Running on GCP App Engine")
+            weights_path = get_file(
+                'cifar10vgg.h5',
+                os.getenv('MODEL_URL'))
+            self.model.load_weights(weights_path)
+        else:
+            self.model.load_weights('cifar10vgg.h5')
+
         self.model.summary()
 
     def build_model(self):

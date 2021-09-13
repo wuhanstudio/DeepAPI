@@ -1,6 +1,10 @@
 runtime: python38
 service: adversarial-classification
 
+env_variables:
+  MODEL_URL: "https://linx.wuhanstudio.uk/selif/cifar10vgg.h5"
+  KERAS_HONE: "/tmp"
+
 instance_class: F4_1G
 
 automatic_scaling:
