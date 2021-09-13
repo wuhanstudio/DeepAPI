@@ -29,7 +29,7 @@ class cifar10vgg:
 
         self.model = self.build_model()
 
-        if os.getenv("MODEL_URL"):
+        if os.getenv("GAE_ENV"):
             print("Running on GCP App Engine")
             weights_path = get_file(
                 'cifar10vgg.h5',
