@@ -1,0 +1,9 @@
+runtime: python38
+service: adversarial-classification
+
+instance_class: F4_1G
+
+automatic_scaling:
+  target_cpu_utilization: 0.8
+  min_instances: 5
+  max_instances: 10

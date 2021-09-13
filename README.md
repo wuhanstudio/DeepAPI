@@ -7,7 +7,7 @@
 ```
 $ conda env create -f environment.yml
 $ conda activate cloudapi
-$ python app.py
+$ python main.py
 ```
 
 Navigate to https://localhost
@@ -20,6 +20,11 @@ Navigate to https://localhost
 docker run -p 80:80 wuhanstudio/adversarial-classification
 ```
 
+### Deploy to Google Cloud App Engine
+
+```
+gcloud app deploy .\app.yml
+```
 
 
 ### API Client
