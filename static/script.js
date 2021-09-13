@@ -13,7 +13,7 @@ function recognize() {
         //the url where you want to sent the userName and password to
         url: window.location.protocol + '//' + window.location.hostname + '/predict',
         contentType : 'application/json',
-        async: false,
+        async: true,
         //json object to sent to the authentication url
         data: JSON.stringify({ "file": base64str}),
         success: function (res) {
