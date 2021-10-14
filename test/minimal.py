@@ -27,7 +27,7 @@ parser.add_argument(
     '--model',
     type=str,
     help='model name', 
-    choices=['cifar10', 'vgg16', 'resnet50', 'inceptionv3'], 
+    choices=['vgg16_cifar10', 'vgg16', 'resnet50', 'inceptionv3'], 
     required=False, 
     default="vgg16"
 )

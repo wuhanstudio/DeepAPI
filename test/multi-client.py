@@ -55,7 +55,7 @@ if __name__ == '__main__':
         '--model',
         type=str,
         help='model name', 
-        choices=['vgg16cifar10', 'vgg16', 'resnet50', 'inceptionv3'], 
+        choices=['vgg16_cifar10', 'vgg16', 'resnet50', 'inceptionv3'], 
         required=False, 
         default="vgg16"
     )
