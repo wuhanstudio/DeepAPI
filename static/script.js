@@ -20,7 +20,7 @@ function recognize() {
     $.ajax
     ({
         type: "POST",
-        url: window.location.protocol + '//' + window.location.host + '/cifar10',
+        url: window.location.protocol + '//' + window.location.host + '/vgg16_cifar10',
         contentType : 'application/json',
         async: true,
         data: JSON.stringify({ "file": base64str}),

@@ -61,7 +61,7 @@ automobile     0.00001
 Sending 10 concurrent requests to the api server:
 
 ```
-$ python client.py 5 cat.jpg
+$ python multi-client.py --num_workers 5 cat.jpg
 ```
 
 You should see the result:
