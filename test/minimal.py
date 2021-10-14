@@ -8,6 +8,8 @@ from PIL import Image
 from io import BytesIO
 import base64
 
+import argparse
+
 def classification(url, file):
 
     # Load the input image and construct the payload for the request
@@ -19,7 +21,20 @@ def classification(url, file):
     data = {'file': base64.b64encode(buff.getvalue()).decode("utf-8")}
     return  requests.post(url, json=data).json()
 
-res = classification('http://127.0.0.1:8080/predict', 'cat.jpg')
+
+parser = argparse.ArgumentParser(description='Distributed Image Classification Client')
+parser.add_argument(
+    '--model',
+    type=str,
+    help='model name', 
+    choices=['cifar10', 'vgg16', 'resnet50', 'inceptionv3'], 
+    required=False, 
+    default="vgg16"
+)
+
+args = parser.parse_args()
+
+res = classification('http://127.0.0.1:8080/' + args.model, 'cat.jpg')
 
 # Print prediction results
 res = sorted(res['predictions'], key=itemgetter('probability'), reverse=True)

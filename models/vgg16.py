@@ -8,7 +8,7 @@ from keras.utils.data_utils import get_file
 
 cifar10_labels = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
-class cifar10vgg:
+class VGG16Cifar10:
     def __init__(self,train=False):
         self.num_classes = 10
         self.weight_decay = 0.0005
@@ -115,3 +115,33 @@ class cifar10vgg:
         model.add(Dense(self.num_classes))
         model.add(Activation('softmax'))
         return model
+
+    def predict(self, image):
+        # Preprocessing
+        img = image.resize((32, 32))
+        img = np.array(img)
+        img = np.expand_dims(img, axis=0)
+        mean = 120.707
+        std = 64.15
+
+        results = self.model.predict((img-mean)/(std+1e-7))[0]
+
+        return [ (cifar10_labels[i], results[i]) for i in range(0, len(results)) ]
+
+from tensorflow.keras.applications.vgg16 import VGG16
+from tensorflow.keras.applications.vgg16 import preprocess_input, decode_predictions
+import numpy as np
+
+class VGG16ImageNet:
+    def __init__(self):
+        self.model = VGG16(weights='imagenet')
+
+    def predict(self, image, top=5):
+        img = image.resize((224, 224))
+        img = np.array(img)
+        img = np.expand_dims(img, axis=0)
+        x = preprocess_input(img)
+        preds = self.model.predict(x)
+        # decode the results into a list of tuples (class, description, probability)
+        # (one such list for each sample in the batch)
+        return decode_predictions(preds, top=top)[0]
