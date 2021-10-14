@@ -21,12 +21,12 @@ docker run -p 80:8080 wuhanstudio/adversarial-classification
 ```
 (echo -n '{"file": "'; base64 test/cat.jpg; echo '"}') | \
 curl -H "Content-Type: application/json" \
-     -d @- https://api.wuhanstudio.uk/predict
+     -d @- https://api.wuhanstudio.uk/cifar10
 ```
 
 ### API Client
 
-It's possible to get prediction results by sending a POST request to http://127.0.0.1/predict. 
+It's possible to get prediction results by sending a POST request to http://127.0.0.1/cifar10. 
 
 ```
 def classification(url, file):
@@ -38,7 +38,7 @@ def classification(url, file):
     data = {'file': base64.b64encode(buff.getvalue()).decode("utf-8")}
     return requests.post(url, json=data).json()
 
-res = classification('http://127.0.0.1:8080/predict', 'cat.jpg')
+res = classification('http://127.0.0.1:8080/cifar10', 'cat.jpg')
 ```
 
 This python script is available as `test/minimal.py`. You should see prediction results by running `python minimal.py`:
