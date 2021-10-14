@@ -10,9 +10,7 @@ $ conda activate cloudapi
 $ python main.py
 ```
 
-Navigate to https://localhost
-
-
+Navigate to https://localhost:8080
 
 ### Using Docker
 
