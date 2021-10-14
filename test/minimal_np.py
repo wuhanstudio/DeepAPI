@@ -17,7 +17,7 @@ def classification(url, file):
     print('Sending requests')
     return  requests.post(url, json=data).json()
 
-res = classification('http://127.0.0.1/predict_np', 'cat.jpg')
+res = classification('http://127.0.0.1:8080/predict_np', 'cat.jpg')
 
 # Print prediction results
 res = sorted(res['predictions'], key=itemgetter('probability'), reverse=True)

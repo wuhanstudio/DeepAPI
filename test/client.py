@@ -57,7 +57,7 @@ if __name__ == '__main__':
     num_workers = args.num_workers
 
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
-        futures = {executor.submit(task, "http://127.0.0.1/predict", args.image) for i in range(num_workers)}
+        futures = {executor.submit(task, "http://127.0.0.1:8080/predict", args.image) for i in range(num_workers)}
 
         print('----- start -----')
         start_time = time.time()

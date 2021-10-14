@@ -19,7 +19,7 @@ def classification(url, file):
     data = {'file': base64.b64encode(buff.getvalue()).decode("utf-8")}
     return  requests.post(url, json=data).json()
 
-res = classification('http://127.0.0.1/predict', 'cat.jpg')
+res = classification('http://127.0.0.1:8080/predict', 'cat.jpg')
 
 # Print prediction results
 res = sorted(res['predictions'], key=itemgetter('probability'), reverse=True)

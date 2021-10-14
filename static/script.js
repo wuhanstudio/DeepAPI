@@ -11,7 +11,7 @@ function recognize() {
     ({
         type: "POST",
         //the url where you want to sent the userName and password to
-        url: window.location.protocol + '//' + window.location.hostname + '/predict',
+        url: window.location.protocol + '//' + window.location.host + '/predict',
         contentType : 'application/json',
         async: true,
         //json object to sent to the authentication url
