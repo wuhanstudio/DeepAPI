@@ -22,7 +22,7 @@ docker run -p 80:8080 wuhanstudio/adversarial-classification
 export IMAGE_FILE=test/cat.jpg
 (echo -n '{"file": "'; base64 $IMAGE_FILE; echo '"}') | \
 curl -H "Content-Type: application/json" \
-     -d @- https://api.wuhanstudio.uk/vgg16_cifar10
+     -d @- http://localhost:8080/vgg16_cifar10
 ```
 
 ### API Client
