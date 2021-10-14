@@ -17,9 +17,14 @@ Navigate to https://localhost
 ### Using Docker
 
 ```
-docker run -p 80:80 wuhanstudio/adversarial-classification
+docker run -p 80:8080 wuhanstudio/adversarial-classification
 ```
 
+```
+(echo -n '{"file": "'; base64 test/cat.jpg; echo '"}') | \
+curl -H "Content-Type: application/json" \
+     -d @- https://api.wuhanstudio.uk/predict
+```
 
 ### API Client
 
@@ -35,7 +40,7 @@ def classification(url, file):
     data = {'file': base64.b64encode(buff.getvalue()).decode("utf-8")}
     return requests.post(url, json=data).json()
 
-res = classification('http://127.0.0.1/predict', 'cat.jpg')
+res = classification('http://127.0.0.1:8080/predict', 'cat.jpg')
 ```
 
 This python script is available as `test/minimal.py`. You should see prediction results by running `python minimal.py`:
@@ -74,3 +79,7 @@ Sending requests
 Concurrent Requests: 5
 Total Runtime: 2.441638708114624
 ```
+
+### References
+
+- https://github.com/geifmany/cifar-vgg

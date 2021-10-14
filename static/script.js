@@ -1,3 +1,13 @@
+var myChart = new Chart(
+    document.getElementById('myChart'),
+    {
+        type: 'bar',
+        data: [],
+        options: {
+            indexAxis: 'y',
+        }
+    }
+);
 
 function refresh() {
     location.reload();
@@ -10,11 +20,9 @@ function recognize() {
     $.ajax
     ({
         type: "POST",
-        //the url where you want to sent the userName and password to
-        url: window.location.protocol + '//' + window.location.host + '/predict',
+        url: window.location.protocol + '//' + window.location.host + '/cifar10',
         contentType : 'application/json',
         async: true,
-        //json object to sent to the authentication url
         data: JSON.stringify({ "file": base64str}),
         success: function (res) {
             $('#prediction').show();
@@ -81,75 +89,7 @@ function recognize() {
     })
 }
 
-var myChart = new Chart(
-    document.getElementById('myChart'),
-    {
-        type: 'bar',
-        data: [],
-        options: {
-            indexAxis: 'y',
-        }
-    }
-);
-
-$('#recognize').prop('disabled', true);
-$('#prediction').hide();
-
-//selecting all required elements
-const dropArea = document.querySelector(".drag-area"),
-dragText = dropArea.querySelector("header"),
-button = dropArea.querySelector("button"),
-input = dropArea.querySelector("input");
-let file;                                       // this is a global variable and we'll use it inside multiple functions
-
-button.onclick = ()=>{
-input.click();                                  // if user click on the button then the input also clicked
-}
-
-input.addEventListener("change", function(){
-  //getting user select file and [0] this means if user select multiple files then we'll select only the first one
-  file = this.files[0];
-  dropArea.classList.add("active");
-  showFile(); 
+$(document).ready(function() {
+    $('#recognize').prop('disabled', true);
+    $('#prediction').hide();
 });
-
-
-//If user Drag File Over DropArea
-dropArea.addEventListener("dragover", (event)=>{
-  event.preventDefault();                       // preventing from default behaviour
-  dropArea.classList.add("active");
-  dragText.textContent = "Release to Upload File";
-});
-
-//If user leave dragged File from DropArea
-dropArea.addEventListener("dragleave", ()=>{
-  dropArea.classList.remove("active");
-  dragText.textContent = "Drag & Drop to Upload File";
-});
-
-//If user drop File on DropArea
-dropArea.addEventListener("drop", (event)=>{
-  event.preventDefault();                                           // preventing from default behaviour
-  // getting user select file and [0] this means if user select multiple files then we'll select only the first one
-  file = event.dataTransfer.files[0];
-  showFile();
-});
-
-function showFile(){
-  let fileType = file.type;                                         // getting selected file type
-  let validExtensions = ["image/jpeg", "image/jpg", "image/png"];   // adding some valid image extensions in array
-  if(validExtensions.includes(fileType)){                           // if user selected file is an image file
-    let fileReader = new FileReader();                              // creating new FileReader object
-    fileReader.onload = ()=>{
-      let fileURL = fileReader.result;                              // passing user file source in fileURL variable
-      let imgTag = `<img src="${fileURL}" alt="">`;                 // creating an img tag and passing user selected file source inside src attribute
-      dropArea.innerHTML = imgTag;                                  // adding that created img tag inside dropArea container
-    $('#recognize').prop('disabled', false);
-    }
-    fileReader.readAsDataURL(file);
-  }else{
-    alert("This is not an Image File!");
-    dropArea.classList.remove("active");
-    dragText.textContent = "Drag & Drop to Upload File";
-  }
-}

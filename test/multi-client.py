@@ -1,16 +1,15 @@
+import time
+import argparse
+
 import requests
 import argparse
 import concurrent.futures
-
-import time
-import argparse
 from operator import itemgetter
 
 import numpy as np
 np.set_printoptions(suppress=True)
 
 from PIL import Image
-
 from io import BytesIO
 import base64
 
@@ -22,7 +21,6 @@ def classification(url, file):
     image.save(buff, format="JPEG")
 
     print('Sending requests')
-    # data = {'file': np.asarray(image).tolist()}
     data = {'file': base64.b64encode(buff.getvalue()).decode("utf-8")}
     return requests.post(url, json=data).json()
 
@@ -63,7 +61,6 @@ if __name__ == '__main__':
         start_time = time.time()
         for future in concurrent.futures.as_completed(futures):
             data = future.result()
-            # print(data)
         print('------ end ------')
 
         print('Concurrent Requests: ' + str(num_workers))
