@@ -139,10 +139,10 @@ Total Runtime: 2.441638708114624
 
 #### Query Parameters:
 
-| Name    | Value                                                        |
-| ------- | ------------------------------------------------------------ |
-| top     | integer in one of [1, 3, 5, 10], top=5 returns top 5 predictions. Default: 10 |
-| no-prob | integer, no-prob=1 returns labels without probabilities.  no-prob=0 returns labels and probabilities. Default: 0 |
+| Name    | Type    | Default | Value                                                        |
+| ------- | ------- | ------- | ------------------------------------------------------------ |
+| top     | integer | 10      | One of [1, 3, 5, 10], top=5 returns top 5 predictions.       |
+| no-prob | integer | 0       | no-prob=1 returns labels without probabilities. no-prob=0 returns labels and probabilities. |
 
 Example post urls (returns top 10 predictions with probabilities):
 
