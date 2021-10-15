@@ -49,7 +49,7 @@ Navigate to https://localhost:8080
 
 ### API Client
 
-It's possible to get predictions by sending a POST request to http://127.0.0.1/vgg16_cifar10. 
+It's possible to get predictions by sending a POST request to http://127.0.0.1:8080/vgg16_cifar10. 
 
 #### Using curl:
 
