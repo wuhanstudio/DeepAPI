@@ -9,14 +9,14 @@ This project provides pre-trained deep learning models as a cloud API service. A
 
 * [Quick Start](#quick-start)
 * [API Client](#api-client)
-  + [Using curl:](#using-curl-)
-  + [Using Python:](#using-python-)
+  + [Using curl](#using-curl-)
+  + [Using Python](#using-python-)
 * [Concurrent clients](#concurrent-clients)
 * [Full APIs](#full-apis)
-  + [Post URLs:](#post-urls-)
-  + [Post Data (JSON):](#post-data--json--)
-  + [Query Parameters:](#query-parameters-)
-  + [Returns (JSON):](#returns--json--)
+  + [Post URLs](#post-urls-)
+  + [Post Data (JSON)](#post-data--json--)
+  + [Query Parameters](#query-parameters-)
+  + [Returns (JSON)](#returns--json--)
   
   
 
