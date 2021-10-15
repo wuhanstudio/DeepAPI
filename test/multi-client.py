@@ -31,17 +31,11 @@ def task(url, file):
     # submit the request
     try:
         r = classification(url, file)
-        if(r['success']):
-            r = sorted(r['predictions'], key=itemgetter('probability'), reverse=True)
-            # for i in r:
-                # print ('{:<15s}{:.5f}'.format(i['label'], i['probability']))
-        else:
-            print(r['error'])
 
     except Exception as e:
         print(e)
 
-    return (time.time() - start_time)
+    return r, (time.time() - start_time)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Distributed Image Classification API')
@@ -70,18 +64,36 @@ if __name__ == '__main__':
         required=False, 
         default="vgg16"
     )
+    parser.add_argument(
+        '--top',
+        type=int,
+        help='Top k classes',
+        default='10'
+    )
+    parser.add_argument('--no-prob', dest='no_prob', action='store_true')
+    parser.set_defaults(no_prob=False)
 
     args = parser.parse_args()
 
     num_workers = args.num_workers
 
+    no_prob = 1 if args.no_prob else 0;
+
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
-        futures = {executor.submit(task, args.url + "/" + args.model, args.image) for i in range(num_workers)}
+        futures = {executor.submit(task, args.url + '/' + args.model + '?top=' + str(args.top) + '&no-prob=' + str(no_prob), args.image) for i in range(num_workers)}
 
         print('----- start -----')
         start_time = time.time()
         for future in concurrent.futures.as_completed(futures):
-            data = future.result()
+            r, data = future.result()
+            if(r['success']):
+                if no_prob:
+                    print ('{:<15s}'.format(r['predictions'][0]['label']))
+                else:
+                    r = sorted(r['predictions'], key=itemgetter('probability'), reverse=True)
+                    print ('{:<15s}{:.5f}'.format(r[0]['label'], r[0]['probability']))
+            else:
+                print(r['error'])
         print('------ end ------')
 
         print('Concurrent Requests: ' + str(num_workers))

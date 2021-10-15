@@ -27,7 +27,9 @@ def generate_response(request, model):
             if img.mode != 'RGB':
                 img = img.convert('RGB')
 
-            top = int(request.args.get('top'))
+            top = request.args.get('top')
+            if top is not None:
+                top = int(request.args.get('top'))
             if top not in [1, 3, 5, 10]:
                 top = 10
 
