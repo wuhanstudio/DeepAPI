@@ -12,6 +12,7 @@ var myChart = new Chart(
 var model = '';
 var dataset = '';
 var topk = 10;
+var noProb = 0;
 
 function check() {
     if(model !== '' && dataset !== '' && $('.drag-area img').attr('src')) {
@@ -64,12 +65,12 @@ function recognize() {
         query = model
     }
 
-    // console.log(window.location.protocol + '//' + window.location.host + '/' + query + '?top=' + topk.toString())
+    console.log(window.location.protocol + '//' + window.location.host + '/' + query + '?top=' + topk.toString() + '&no-prob=' + noProb)
 
     $.ajax
     ({
         type: "POST",
-        url: window.location.protocol + '//' + window.location.host + '/' + query + '?top=' + topk.toString(),
+        url: window.location.protocol + '//' + window.location.host + '/' + query + '?top=' + topk.toString() + '&no-prob=' + noProb,
         contentType : 'application/json',
         async: true,
         data: JSON.stringify({ "file": base64str}),
@@ -89,52 +90,70 @@ function recognize() {
                 return pV; 
             }, []);
 
-            // Probabilities
-            const probs = res.reduce(function(pV, cV, cI){
-                pV.push(cV.probability);
-                return pV; 
-            }, []);
+            if (noProb == 0) {
 
-            const data = {
-                labels: labels,
-                datasets: [{
-                  axis: 'y',
-                  label: model + '_' + dataset + ' Predictions',
-                  data: probs,
-                  fill: true,
-                  backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 205, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(201, 203, 207, 0.2)',
-                    'rgba(201, 203, 207, 0.2)',
-                    'rgba(201, 203, 207, 0.2)',
-                    'rgba(201, 203, 207, 0.2)',
-                  ],
-                  borderColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(255, 159, 64)',
-                    'rgb(255, 205, 86)',
-                    'rgb(75, 192, 192)',
-                    'rgb(54, 162, 235)',
-                    'rgb(153, 102, 255)',
-                    'rgb(201, 203, 207)',
-                    'rgb(201, 203, 207)',
-                    'rgb(201, 203, 207)',
-                    'rgb(201, 203, 207)',
-                  ],
-                  borderWidth: 1
-                }]
-            };
-                
-            myChart.data = data;
-            myChart.update();
+                $("#with-prob").show();
+                $("#no-prob").hide();
 
+
+                // Probabilities
+                const probs = res.reduce(function(pV, cV, cI){
+                    pV.push(cV.probability);
+                    return pV; 
+                }, []);
+
+                const data = {
+                    labels: labels,
+                    datasets: [{
+                    axis: 'y',
+                    label: model + '_' + dataset + ' Predictions',
+                    data: probs,
+                    fill: true,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)',
+                        'rgba(201, 203, 207, 0.2)',
+                        'rgba(201, 203, 207, 0.2)',
+                        'rgba(201, 203, 207, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)',
+                        'rgb(201, 203, 207)',
+                        'rgb(201, 203, 207)',
+                        'rgb(201, 203, 207)',
+                    ],
+                    borderWidth: 1
+                    }]
+                };
+                    
+                myChart.data = data;
+                myChart.update();
+            }
+            else {
+
+                $("#with-prob").hide();
+                $("#no-prob").show();
+
+                res_table = '<ul class="list-group text-center mt-3">'
+                for (var i = 0; i < labels.length; i++) {
+                    res_table = res_table + '<li class="list-group-item">' + labels[i] + '</li>'
+                }
+                res_table = res_table + '</ul>';
+                $("#no-prob").html(res_table);
+            }
             $([document.documentElement, document.body]).animate({
-                scrollTop: $("#myChart").offset().top - 150
+                scrollTop: $("#prediction").offset().top - 150
             }, 2000);
         }
     })
@@ -143,9 +162,20 @@ function recognize() {
 $(document).ready(function() {
     $('#recognize').prop('disabled', true);
     $('#prediction').hide();
+    $("#flexSwitchCheckShowProb").prop("checked", true);
 
     $(".dropdown-menu li a").click(function(){
         $(this).parents(".dropdown").find('.btn').html($(this).text());
         $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+    });
+
+    $("#flexSwitchCheckShowProb").on('change', function() {
+        if ($(this).is(':checked')) {
+            noProb = 0;
+        }
+        else {
+            noProb = 1;
+        }
+        console.log(noProb)
     });
 });

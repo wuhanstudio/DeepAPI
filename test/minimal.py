@@ -44,15 +44,23 @@ parser.add_argument(
     required=False, 
     default="vgg16"
 )
+parser.add_argument('--no-prob', dest='no_prob', action='store_true')
+parser.set_defaults(no_prob=False)
 
 args = parser.parse_args()
 
-res = classification(args.url + '/' + args.model + '?top=' + str(args.top), 'cat.jpg')
+no_prob = 1 if args.no_prob else 0;
+
+res = classification(args.url + '/' + args.model + '?top=' + str(args.top) + '&no-prob=' + str(no_prob), 'cat.jpg')
 
 # Print prediction results
 if res['success']:
-    res = sorted(res['predictions'], key=itemgetter('probability'), reverse=True)
-    for i in res:
-        print('{:<15s}{:.5f}'.format(i['label'], i['probability']))
+    if no_prob == 0:
+        res = sorted(res['predictions'], key=itemgetter('probability'), reverse=True)
+        for i in res:
+            print('{:<15s}{:.5f}'.format(i['label'], i['probability']))
+    else:
+        for i in res['predictions']:
+            print('{:<15s}'.format(i['label']))
 else:
     print(res['error'])
