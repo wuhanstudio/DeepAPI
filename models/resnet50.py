@@ -6,7 +6,7 @@ class ResNet50ImageNet:
     def __init__(self):
         self.model = ResNet50(weights='imagenet')
 
-    def predict(self, image, top=5):
+    def predict(self, image, top=10):
         img = image.resize((224, 224))
         img = np.array(img)
         img = np.expand_dims(img, axis=0)

@@ -41,15 +41,21 @@ def task(url, file):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Distributed Image Classification API')
     parser.add_argument(
-        '--num_workers',
-        type=int,
-        help='Number of workers.',
-        default=4
-    )
-    parser.add_argument(
         'image',
         type=str,
         help='image file'
+    )
+    parser.add_argument(
+        '--url',
+        type=str,
+        help='API url',
+        default='http://localhost:8080'
+    )
+    parser.add_argument(
+        '--num_workers',
+        type=int,
+        help='number of workers.',
+        default=4
     )
     parser.add_argument(
         '--model',
@@ -65,7 +71,7 @@ if __name__ == '__main__':
     num_workers = args.num_workers
 
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
-        futures = {executor.submit(task, "http://127.0.0.1:8080/" + args.model, args.image) for i in range(num_workers)}
+        futures = {executor.submit(task, args.url + "/" + args.model, args.image) for i in range(num_workers)}
 
         print('----- start -----')
         start_time = time.time()

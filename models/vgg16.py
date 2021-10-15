@@ -116,7 +116,7 @@ class VGG16Cifar10:
         model.add(Activation('softmax'))
         return model
 
-    def predict(self, image):
+    def predict(self, image, top=10):
         # Preprocessing
         img = image.resize((32, 32))
         img = np.array(img)
@@ -125,8 +125,9 @@ class VGG16Cifar10:
         std = 64.15
 
         results = self.model.predict((img-mean)/(std+1e-7))[0]
+        results = [ (cifar10_labels[i], results[i]) for i in range(0, len(cifar10_labels)) ]
 
-        return [ (cifar10_labels[i], results[i]) for i in range(0, len(results)) ]
+        return sorted(results, key=lambda tup: tup[1], reverse=True)[0: top]
 
 from tensorflow.keras.applications.vgg16 import VGG16
 from tensorflow.keras.applications.vgg16 import preprocess_input, decode_predictions
@@ -136,7 +137,7 @@ class VGG16ImageNet:
     def __init__(self):
         self.model = VGG16(weights='imagenet')
 
-    def predict(self, image, top=5):
+    def predict(self, image, top=10):
         img = image.resize((224, 224))
         img = np.array(img)
         img = np.expand_dims(img, axis=0)

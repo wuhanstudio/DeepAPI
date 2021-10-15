@@ -9,23 +9,74 @@ var myChart = new Chart(
     }
 );
 
+var model = '';
+var dataset = '';
+var topk = 10;
+
+function check() {
+    if(model !== '' && dataset !== '' && $('.drag-area img').attr('src')) {
+        $('#recognize').prop('disabled', false);
+    }
+    else {
+        $('#recognize').prop('disabled', true);
+    }
+}
+
+function setDataset(name) {
+    dataset = name;
+    if(name === 'cifar10') {
+        $('#dropdownMenuButtonModel').html('VGG16');
+        model = 'vgg16';
+        $("#model-resnet50").hide();
+        $("#model-inceptionv3").hide();
+    }
+    else
+    {
+        $("#model-resnet50").show();
+        $("#model-inceptionv3").show();
+    }
+    check();
+}
+
+function setModel(name) {
+    model = name;
+    check();
+}
+
+function setTop(t) {
+    topk = t
+}
+
 function refresh() {
     location.reload();
 };
 
 function recognize() {
-    base64str = $('.drag-area img').attr('src');
-    base64str = base64str.replace('data:image/jpeg;base64,', '');
+    var base64str = $('.drag-area img').attr('src');
+    var base64str = base64str.replace('data:image/jpeg;base64,', '');
+
+    var query = ''
+    if(dataset === 'cifar10') {
+        query = 'vgg16_cifar10';
+    }
+    else if (dataset === 'imagenet') {
+        // vgg16, resnet50, inceptionv3
+        query = model
+    }
+
+    // console.log(window.location.protocol + '//' + window.location.host + '/' + query + '?top=' + topk.toString())
 
     $.ajax
     ({
         type: "POST",
-        url: window.location.protocol + '//' + window.location.host + '/vgg16_cifar10',
+        url: window.location.protocol + '//' + window.location.host + '/' + query + '?top=' + topk.toString(),
         contentType : 'application/json',
         async: true,
         data: JSON.stringify({ "file": base64str}),
         success: function (res) {
             $('#prediction').show();
+
+            console.log(res)
 
             // Sort predictions
             res = res.predictions.sort(function(a,b) {
@@ -48,7 +99,7 @@ function recognize() {
                 labels: labels,
                 datasets: [{
                   axis: 'y',
-                  label: 'Cifar10 Predictions',
+                  label: model + '_' + dataset + ' Predictions',
                   data: probs,
                   fill: true,
                   backgroundColor: [
@@ -92,4 +143,9 @@ function recognize() {
 $(document).ready(function() {
     $('#recognize').prop('disabled', true);
     $('#prediction').hide();
+
+    $(".dropdown-menu li a").click(function(){
+        $(this).parents(".dropdown").find('.btn').html($(this).text());
+        $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+    });
 });

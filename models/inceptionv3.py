@@ -6,7 +6,7 @@ class InceptionV3ImageNet:
     def __init__(self):
         self.model = InceptionV3(weights='imagenet')
 
-    def predict(self, image, top=5):
+    def predict(self, image, top=10):
         img = image.resize((299, 299))
         img = np.array(img)
         img = np.expand_dims(img, axis=0)

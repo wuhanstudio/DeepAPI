@@ -24,6 +24,18 @@ def classification(url, file):
 
 parser = argparse.ArgumentParser(description='Distributed Image Classification Client')
 parser.add_argument(
+    '--url',
+    type=str,
+    help='API url',
+    default='http://localhost:8080'
+)
+parser.add_argument(
+    '--top',
+    type=int,
+    help='Top k classes',
+    default='10'
+)
+parser.add_argument(
     '--model',
     type=str,
     help='model name', 
@@ -34,7 +46,7 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-res = classification('http://127.0.0.1:8080/' + args.model, 'cat.jpg')
+res = classification(args.url + '/' + args.model + '?top=' + str(args.top), 'cat.jpg')
 
 # Print prediction results
 res = sorted(res['predictions'], key=itemgetter('probability'), reverse=True)
