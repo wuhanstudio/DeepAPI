@@ -68,7 +68,7 @@ def vgg16():
             results = m_vgg16.predict(img)
 
             response['predictions'] = []
-            for i in range(0, len(results)): # [0] as input is only one image
+            for i in range(0, len(results)):
                 row = {'label': results[i][1], 'probability': float(results[i][2])} # numpy float is not good for json
                 response['predictions'].append(row)
             response['success'] = True
