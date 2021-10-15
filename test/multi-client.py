@@ -22,6 +22,7 @@ def classification(url, file):
 
     print('Sending requests')
     data = {'file': base64.b64encode(buff.getvalue()).decode("utf-8")}
+
     return requests.post(url, json=data).json()
 
 def task(url, file):
@@ -30,9 +31,13 @@ def task(url, file):
     # submit the request
     try:
         r = classification(url, file)
-        r = sorted(r['predictions'], key=itemgetter('probability'), reverse=True)
-        # for i in r:
-            # print ('{:<15s}{:.5f}'.format(i['label'], i['probability']))
+        if(r['success']):
+            r = sorted(r['predictions'], key=itemgetter('probability'), reverse=True)
+            # for i in r:
+                # print ('{:<15s}{:.5f}'.format(i['label'], i['probability']))
+        else:
+            print(r['error'])
+
     except Exception as e:
         print(e)
 

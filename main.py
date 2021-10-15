@@ -19,6 +19,37 @@ m_inceptionv3       = InceptionV3ImageNet()
 
 app = Flask(__name__)
 
+def generate_response(request, model):
+    response = {'success': False}
+    if request.json.get('file'): # image is stored as name "file"
+        try:
+            img = Image.open(BytesIO(base64.b64decode(request.json.get('file'))))
+            if img.mode != 'RGB':
+                img = img.convert('RGB')
+
+            top = int(request.args.get('top'))
+            if top not in [1, 3, 5, 10]:
+                top = 10
+
+            results = model.predict(img, top=top)
+
+            response['predictions'] = []
+            print(results)
+            for i in range(0, len(results)):
+                row = {'label': results[i][1], 'probability': float(results[i][2])} # numpy float is not good for json
+                response['predictions'].append(row)
+            response['success'] = True
+
+        except Exception as e:
+                response['success'] = False
+                response['error'] = str(e)
+                print(response)
+        finally:        
+            return jsonify(response)
+    else:
+        response['error'] = 'no image file'
+        return jsonify(response)
+
 # Serve the front-end
 @app.route("/")
 def index():
@@ -34,29 +65,7 @@ def vgg16cifar10():
     global m_vgg16_cifar10
     response = {'success': False}
     if request.method == 'POST':
-        try:
-            if request.json.get('file'): # image is stored as name "file"
-                img = Image.open(BytesIO(base64.b64decode(request.json.get('file'))))
-                if img.mode != 'RGB':
-                    img = img.convert('RGB')
-
-                top = int(request.args.get('top'))
-                if top not in [1, 3, 5, 10]:
-                    top = 10
-
-                results = m_vgg16_cifar10.predict(img, top=top)
-
-                response['predictions'] = []
-                for i in range(0, len(results)):
-                    row = {'label': results[i][0], 'probability': float(results[i][1])} # numpy float is not good for json
-                    response['predictions'].append(row)
-                response['success'] = True
-        except Exception as e:
-                response['success'] = False
-                response['error'] = e
-                return jsonify(response)   
-          
-        return jsonify(response)
+        return generate_response(request, m_vgg16_cifar10)
 
     return '''
     <!doctype html>
@@ -67,33 +76,8 @@ def vgg16cifar10():
 @app.route('/vgg16', methods=['GET', 'POST'])
 def vgg16():
     global m_vgg16
-    response = {'success': False}
     if request.method == 'POST':
-        try:
-            if request.json.get('file'): # image is stored as name "file"
-                img = Image.open(BytesIO(base64.b64decode(request.json.get('file'))))
-                if img.mode != 'RGB':
-                    img = img.convert('RGB')
-
-                top = int(request.args.get('top'))
-                print(top)
-                if top not in [1, 3, 5, 10]:
-                    top = 10
-
-                results = m_vgg16.predict(img, top=top)
-
-                response['predictions'] = []
-                for i in range(0, len(results)):
-                    row = {'label': results[i][1], 'probability': float(results[i][2])} # numpy float is not good for json
-                    response['predictions'].append(row)
-                response['success'] = True
-
-        except Exception as e:
-                response['success'] = False
-                response['error'] = e
-                return jsonify(response) 
-
-        return jsonify(response)
+        return generate_response(request, m_vgg16)
 
     return '''
     <!doctype html>
@@ -104,30 +88,8 @@ def vgg16():
 @app.route('/resnet50', methods=['GET', 'POST'])
 def resnet50():
     global m_resnet50
-    response = {'success': False}
     if request.method == 'POST':
-        if request.json.get('file'): # image is stored as name "file"
-            try:
-                img = Image.open(BytesIO(base64.b64decode(request.json.get('file'))))
-                if img.mode != 'RGB':
-                    img = img.convert('RGB')
-
-                top = int(request.args.get('top'))
-                if top not in [1, 3, 5, 10]:
-                    top = 10
-                results = m_resnet50.predict(img, top=top)
-
-                response['predictions'] = []
-                for i in range(0, len(results)): # [0] as input is only one image
-                    row = {'label': results[i][1], 'probability': float(results[i][2])} # numpy float is not good for json
-                    response['predictions'].append(row)
-                response['success'] = True
-            except Exception as e:
-                response['success'] = False
-                response['error'] = e
-                return jsonify(response) 
-            
-            return jsonify(response)
+        return generate_response(request, m_resnet50)
 
     return '''
     <!doctype html>
@@ -138,31 +100,8 @@ def resnet50():
 @app.route('/inceptionv3', methods=['GET', 'POST'])
 def inceptionv3():
     global m_inceptionv3
-    response = {'success': False}
     if request.method == 'POST':
-        try:
-            if request.json.get('file'): # image is stored as name "file"
-                img = Image.open(BytesIO(base64.b64decode(request.json.get('file'))))
-                if img.mode != 'RGB':
-                    img = img.convert('RGB')
-
-                top = int(request.args.get('top'))
-                if top not in [1, 3, 5, 10]:
-                    top = 10
-
-                results = m_inceptionv3.predict(img, top=top)
-
-                response['predictions'] = []
-                for i in range(0, len(results)): # [0] as input is only one image
-                    row = {'label': results[i][1], 'probability': float(results[i][2])} # numpy float is not good for json
-                    response['predictions'].append(row)
-                response['success'] = True
-
-        except Exception as e:
-                response['success'] = False
-                response['error'] = e
-        
-        return jsonify(response) 
+        return generate_response(request, m_inceptionv3)
 
     return '''
     <!doctype html>

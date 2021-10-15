@@ -19,6 +19,7 @@ def classification(url, file):
 
     print('Sending requests')
     data = {'file': base64.b64encode(buff.getvalue()).decode("utf-8")}
+
     return  requests.post(url, json=data).json()
 
 
@@ -49,6 +50,9 @@ args = parser.parse_args()
 res = classification(args.url + '/' + args.model + '?top=' + str(args.top), 'cat.jpg')
 
 # Print prediction results
-res = sorted(res['predictions'], key=itemgetter('probability'), reverse=True)
-for i in res:
-    print('{:<15s}{:.5f}'.format(i['label'], i['probability']))
+if res['success']:
+    res = sorted(res['predictions'], key=itemgetter('probability'), reverse=True)
+    for i in res:
+        print('{:<15s}{:.5f}'.format(i['label'], i['probability']))
+else:
+    print(res['error'])

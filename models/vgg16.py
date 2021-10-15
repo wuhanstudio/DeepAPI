@@ -25,7 +25,7 @@ class VGG16Cifar10:
         else:
             self.model.load_weights('cifar10vgg.h5')
 
-        self.model.summary()
+        # self.model.summary()
 
     def build_model(self):
         # Build the network of vgg for 10 classes with massive dropout and weight decay as described in the paper.
@@ -125,9 +125,9 @@ class VGG16Cifar10:
         std = 64.15
 
         results = self.model.predict((img-mean)/(std+1e-7))[0]
-        results = [ (cifar10_labels[i], results[i]) for i in range(0, len(cifar10_labels)) ]
+        results = [ (i, cifar10_labels[i], results[i]) for i in range(0, len(cifar10_labels)) ]
 
-        return sorted(results, key=lambda tup: tup[1], reverse=True)[0: top]
+        return sorted(results, key=lambda tup: tup[2], reverse=True)[0: top]
 
 from tensorflow.keras.applications.vgg16 import VGG16
 from tensorflow.keras.applications.vgg16 import preprocess_input, decode_predictions
