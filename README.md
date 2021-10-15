@@ -2,7 +2,7 @@
 
 > Deep Learning as Cloud APIs.
 
-This project provides pre-trained deep learning models as a cloud API service. There is a web interface as well.
+This project provides pre-trained deep learning models as a cloud API service. A web interface is available as well.
 
 ![](demo.gif)
 
