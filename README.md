@@ -74,7 +74,7 @@ def classification(url, file):
     data = {'file': base64.b64encode(buff.getvalue()).decode("utf-8")}
     return requests.post(url, json=data).json()
 
-res = classification('http://127.0.0.1:8080/cifar10', 'cat.jpg')
+res = classification('http://127.0.0.1:8080/vgg', 'cat.jpg')
 ```
 
 This python script is available in the `test` folder. You should see prediction results by running `python3 minimal.py`:
