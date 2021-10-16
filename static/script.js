@@ -70,7 +70,8 @@ function setModel(name) {
 }
 
 function setTop(t) {
-    topk = t
+    topk = t;
+    check();
 }
 
 function refresh() {
