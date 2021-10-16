@@ -193,7 +193,7 @@ export IMAGE_FILE="T_FILE"
 
 (echo -n '{"file": "'; base64 $IMAGE_FILE; echo '"}') | \
 curl -H "Content-Type: application/json" \
-     -d @- T_URL
+     -d @- "T_URL"
 </code></pre>
                     </div>
                 </div>
