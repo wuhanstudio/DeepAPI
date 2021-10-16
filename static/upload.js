@@ -9,10 +9,11 @@ button.onclick = ()=>{
   input.click();                                  // if user click on the button then the input also clicked
 }
 
-input.addEventListener("change", function(){
+input.addEventListener("change", function(event){
   //getting user select file and [0] this means if user select multiple files then we'll select only the first one
   file = this.files[0];
   dropArea.classList.add("active");
+  setFile(this.files[0].name);
   showFile(); 
 });
 
@@ -35,6 +36,8 @@ dropArea.addEventListener("drop", (event)=>{
   event.preventDefault();                                           // preventing from default behaviour
   // getting user select file and [0] this means if user select multiple files then we'll select only the first one
   file = event.dataTransfer.files[0];
+  setFile(event.dataTransfer.files[0].name);
+
   showFile();
 });
 

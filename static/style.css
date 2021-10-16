@@ -33,6 +33,9 @@ body {
     color: #000 !important; 
 }
 
+
+/*---- File Upload ----*/
+
 .drag-area{
     background-color: #DDD !important;
     border: 2px dashed #000;
@@ -85,6 +88,39 @@ body {
     object-fit: cover;
     border-radius: 5px;
 }
+
+#codegen {
+    width: 80%;
+    margin-left: 10%;
+}
+
+.copy-code-button {
+    border-color: #272822;
+
+    border: 2px solid;
+    border-radius: 3px 3px 0px 0px;
+
+    /* right-align */
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+
+    margin-bottom: -2px;
+    padding: 3px 8px;
+    font-size: 1em;
+}
+
+.copy-code-button:hover {
+    cursor: pointer;
+}
+
+
+.highlight pre {
+    /* Avoid pushing up the copy buttons. */
+    margin: 0;
+}
+
+/*--- Footer ---*/
 
 #main-footer {
     background: #000;

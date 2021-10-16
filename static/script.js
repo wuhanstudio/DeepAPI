@@ -13,6 +13,12 @@ var model = '';
 var dataset = '';
 var topk = 10;
 var noProb = 0;
+var filename = '';
+var url = ''
+
+// Codegen tamplate
+var python_template = '';
+var curl_template = '';
 
 function check() {
     if(model !== '' && dataset !== '' && $('.drag-area img').attr('src')) {
@@ -21,6 +27,25 @@ function check() {
     else {
         $('#recognize').prop('disabled', true);
     }
+
+    var query = ''
+    if(dataset === 'cifar10') {
+        query = 'vgg16_cifar10';
+    }
+    else if (dataset === 'imagenet') {
+        // vgg16, resnet50, inceptionv3
+        query = model
+    }
+
+    url =  window.location.protocol + '//' + window.location.host + '/' + query + '?top=' + topk.toString() + '&no-prob=' + noProb
+
+    // Generate code
+    $('#python-code').html(python_template.replace('T_URL', url).replace('T_FILE', filename));
+    $('#curl-code').html(curl_template.replace('T_URL', url).replace('T_FILE', filename));
+}
+
+function setFile(name) {
+    filename = name;
 }
 
 function setDataset(name) {
@@ -56,26 +81,14 @@ function recognize() {
     var base64str = $('.drag-area img').attr('src');
     var base64str = base64str.replace('data:image/jpeg;base64,', '');
 
-    var query = ''
-    if(dataset === 'cifar10') {
-        query = 'vgg16_cifar10';
-    }
-    else if (dataset === 'imagenet') {
-        // vgg16, resnet50, inceptionv3
-        query = model
-    }
-
-    console.log(window.location.protocol + '//' + window.location.host + '/' + query + '?top=' + topk.toString() + '&no-prob=' + noProb)
-
     $.ajax
     ({
         type: "POST",
-        url: window.location.protocol + '//' + window.location.host + '/' + query + '?top=' + topk.toString() + '&no-prob=' + noProb,
+        url: url,
         contentType : 'application/json',
         async: true,
         data: JSON.stringify({ "file": base64str}),
         success: function (res) {
-            $('#prediction').show();
 
             console.log(res)
 
@@ -152,18 +165,63 @@ function recognize() {
                 res_table = res_table + '</ul>';
                 $("#no-prob").html(res_table);
             }
+
+            $('#prediction').show();
+
             $([document.documentElement, document.body]).animate({
-                scrollTop: $("#prediction").offset().top - 150
+                scrollTop: $("#prediction").offset().top - 30
             }, 2000);
+
+            $('#codegen').show();
         }
     })
 }
 
-$(document).ready(function() {
-    $('#recognize').prop('disabled', true);
-    $('#prediction').hide();
-    $("#flexSwitchCheckShowProb").prop("checked", true);
+function addCopyButtons(clipboard) {
+    document.querySelectorAll('pre > code').forEach(function (codeBlock) {
+        var button = document.createElement('button');
+        button.className = 'btn btn-primary copy-code-button';
+        button.type = 'button';
+        button.innerText = 'Copy';
 
+        button.addEventListener('click', function () {
+            clipboard.writeText(codeBlock.innerText).then(function () {
+                /* Chrome doesn't seem to blur automatically,
+                   leaving the button in a focused state. */
+                button.blur();
+
+                button.innerText = 'Copied!';
+
+                setTimeout(function () {
+                    button.innerText = 'Copy';
+                }, 2000);
+            }, function (error) {
+                button.innerText = 'Error';
+            });
+        });
+
+        var pre = codeBlock.parentNode;
+        if (pre.parentNode.classList.contains('highlight')) {
+            var highlight = pre.parentNode;
+            highlight.parentNode.insertBefore(button, highlight);
+        } else {
+            pre.parentNode.insertBefore(button, pre);
+        }
+    });
+}
+
+$(document).ready(function() {
+    // Show probabilities by default
+    $("#flexSwitchCheckShowProb").prop("checked", true);
+    
+    // Diable the button if no file is selected
+    $('#recognize').prop('disabled', true);
+
+    // Hide prediction and codegen
+    $('#prediction').hide();
+    $('#codegen').hide();
+
+    // Show selected dataset and model
     $(".dropdown-menu li a").click(function(){
         $(this).parents(".dropdown").find('.btn').html($(this).text());
         $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
@@ -176,6 +234,23 @@ $(document).ready(function() {
         else {
             noProb = 1;
         }
-        console.log(noProb)
     });
+
+    // Copy to clipboard
+    if (navigator && navigator.clipboard) {
+        addCopyButtons(navigator.clipboard);
+    } else {
+        var script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/clipboard-polyfill/2.7.0/clipboard-polyfill.promise.js';
+        script.integrity = 'sha256-waClS2re9NUbXRsryKoof+F9qc1gjjIhc2eT7ZbIv94=';
+        script.crossOrigin = 'anonymous';
+        script.onload = function() {
+            addCopyButtons(clipboard);
+        };
+    
+        document.body.appendChild(script);
+    }
+
+    python_template = $('#python-code').html();
+    curl_template = $('#curl-code').html();
 });
