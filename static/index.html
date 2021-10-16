@@ -54,6 +54,7 @@
     <div class="container">
         <div class="row mt-2">
             <div class="col col-12 d-flex justify-content-center">
+
                 <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group me-3 dropdown" role="group">
                         <div class="dropdown">
@@ -69,19 +70,25 @@
 
                     <div class="btn-group me-3 dropdown" role="group">
                         <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonModel" data-bs-toggle="dropdown" aria-expanded="false">
-                            Choose Model
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonModel">
-                            <li><a id="model-vgg16" class="dataset dropdown-item active" onclick="setModel('vgg16')">VGG16</a></li>
-                            <li><a id="model-resnet50" class="dataset dropdown-item" onclick="setModel('resnet50')">Resnet50</a></li>
-                            <li><a id="model-inceptionv3" class="dataset dropdown-item" onclick="setModel('inceptionv3')">Inceptionv3</a></li>
-                        </ul>
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonModel" data-bs-toggle="dropdown" aria-expanded="false">
+                                Choose Model
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonModel">
+                                <li><a id="model-vgg16" class="dataset dropdown-item active" onclick="setModel('vgg16')">VGG16</a></li>
+                                <li><a id="model-resnet50" class="dataset dropdown-item" onclick="setModel('resnet50')">Resnet50</a></li>
+                                <li><a id="model-inceptionv3" class="dataset dropdown-item" onclick="setModel('inceptionv3')">Inceptionv3</a></li>
+                            </ul>
+                        </div>
                     </div>
-                    </div>
-                
-                    <div class="btn-group me-3 dropdown" role="group">
-                        <div class="dropdown">
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col col-12 d-flex justify-content-center mt-2">
+                <div class="btn-group me-3 dropdown" role="group">
+                    <div class="dropdown">
                         <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButtonTop" data-bs-toggle="dropdown" aria-expanded="false">
                             Top 10
                         </button>
@@ -92,14 +99,10 @@
                             <li><a class="dropdown-item" onclick="setTop(1)">Top 1</a></li>
                         </ul>
                     </div>
-                    </div>
                 </div>
-
             </div>
-        </div>
 
-        <div class="row mt-3">
-            <div class="col col-12 d-flex justify-content-center">
+            <div class="col col-12 d-flex justify-content-center mt-3">
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="flexSwitchCheckShowProb" checked>
                     <label class="form-check-label" for="flexSwitchCheckShowProb">Show Probability</label>
@@ -108,7 +111,7 @@
         </div>
     </div>
 
-    <div class="container mt-5 mb-5">
+    <div class="container mt-3 mb-5">
         <div class="row">
             <div class="col col-12 d-flex justify-content-center">
                 <div class="btn-toolbar" role="toolbar">
