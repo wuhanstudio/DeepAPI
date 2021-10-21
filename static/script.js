@@ -93,6 +93,14 @@ function recognize() {
 
             console.log(res)
 
+            // Display error message
+            if (!res.success) {
+                const snackbar = new simpleSnackbar(res.error, {
+                    type: 'danger',
+                }).show();;
+                return;
+            }
+
             // Sort predictions
             res = res.predictions.sort(function(a,b) {
                 return b.probability - a.probability
@@ -212,6 +220,7 @@ function addCopyButtons(clipboard) {
 }
 
 $(document).ready(function() {
+
     // Show probabilities by default
     $("#flexSwitchCheckShowProb").prop("checked", true);
     

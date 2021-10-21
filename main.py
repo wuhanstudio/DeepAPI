@@ -1,3 +1,4 @@
+import argparse
 from flask import Flask, request, jsonify, send_from_directory
 
 import numpy as np
@@ -7,20 +8,21 @@ from PIL import Image
 from io import BytesIO
 import base64
 
-# Import Keras models
-from models.vgg16 import VGG16Cifar10, VGG16ImageNet
-from models.resnet50 import ResNet50ImageNet
-from models.inceptionv3 import InceptionV3ImageNet
-
-m_vgg16_cifar10     = VGG16Cifar10()
-m_vgg16             = VGG16ImageNet()
-m_resnet50          = ResNet50ImageNet()
-m_inceptionv3       = InceptionV3ImageNet()
+m_vgg16_cifar10     = None
+m_vgg16             = None
+m_resnet50          = None
+m_inceptionv3       = None
 
 app = Flask(__name__)
 
 def generate_response(request, model):
     response = {'success': False}
+
+    # If this model is not activated/imported
+    if model is None:
+        response['error'] = str('Please enable this model on the api server.')
+        return jsonify(response)
+
     if request.json.get('file'): # image is stored as name "file"
         try:
             img = Image.open(BytesIO(base64.b64decode(request.json.get('file'))))
@@ -74,6 +76,7 @@ def send_website(path):
 def vgg16cifar10():
     global m_vgg16_cifar10
     response = {'success': False}
+
     if request.method == 'POST':
         return generate_response(request, m_vgg16_cifar10)
 
@@ -120,6 +123,42 @@ def inceptionv3():
     '''
 
 if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description='DeepAPI Application')
+    
+    # Load each model
+    parser.add_argument('--vgg16_cifar10', dest='vgg16_cifar10', action='store_true')
+    parser.add_argument('--vgg16_imagenet', dest='vgg16_imagenet', action='store_true')
+    parser.add_argument('--resnet50_imagenet', dest='resnet50_imagenet', action='store_true')
+    parser.add_argument('--inceptionv3_imagenet', dest='inceptionv3_imagenet', action='store_true')
+    parser.add_argument('--all', dest='all', action='store_true')
+
+    # Only activate VGG16 Cifar10 by default
+    parser.set_defaults(vgg16_cifar10=True)
+    parser.set_defaults(vgg16_imagenet=False)
+    parser.set_defaults(resnet50_imagenet=False)
+    parser.set_defaults(inceptionv3_imagenet=False)
+    parser.set_defaults(all=False)
+
+    args = parser.parse_args()
+
+    # Import Keras models
+    if args.vgg16_cifar10 or args.all:
+        from models.vgg16 import VGG16Cifar10, VGG16ImageNet
+        m_vgg16_cifar10     = VGG16Cifar10()
+    
+    if args.vgg16_imagenet or args.all:
+        from models.vgg16 import VGG16ImageNet
+        m_vgg16             = VGG16ImageNet()
+
+    if args.resnet50_imagenet or args.all:
+        from models.resnet50 import ResNet50ImageNet
+        m_resnet50          = ResNet50ImageNet()
+        
+    if args.inceptionv3_imagenet or args.all:
+        from models.inceptionv3 import InceptionV3ImageNet
+        m_inceptionv3       = InceptionV3ImageNet()
+
     # no-thread: https://github.com/keras-team/keras/issues/2397#issuecomment-377914683
     # avoid model.predict runs before model initiated
     # To let this run on HEROKU, model.predict should run onece after initialized
