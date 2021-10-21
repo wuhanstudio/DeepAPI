@@ -54,7 +54,7 @@ function showFile(){
     }
     fileReader.readAsDataURL(file);
   }else{
-    alert("This is not an Image File!");
+    alert("This is not an JPEG Image File!");
     dropArea.classList.remove("active");
     dragText.textContent = "Drag & Drop to Upload File";
   }
