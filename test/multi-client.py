@@ -54,7 +54,7 @@ if __name__ == '__main__':
         '--num_workers',
         type=int,
         help='number of workers.',
-        default=4
+        default=5
     )
     parser.add_argument(
         '--model',
@@ -62,7 +62,7 @@ if __name__ == '__main__':
         help='model name', 
         choices=['vgg16_cifar10', 'vgg16', 'resnet50', 'inceptionv3'], 
         required=False, 
-        default="vgg16"
+        default="vgg16_cifar10"
     )
     parser.add_argument(
         '--top',

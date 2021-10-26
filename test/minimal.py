@@ -42,7 +42,7 @@ parser.add_argument(
     help='model name', 
     choices=['vgg16_cifar10', 'vgg16', 'resnet50', 'inceptionv3'], 
     required=False, 
-    default="vgg16"
+    default="vgg16_cifar10"
 )
 parser.add_argument('--no-prob', dest='no_prob', action='store_true')
 parser.set_defaults(no_prob=False)
