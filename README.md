@@ -53,14 +53,12 @@ It's possible to get predictions by sending a POST request to http://127.0.0.1:8
 
 #### Using curl:
 
-````
 ```
 export IMAGE_FILE=test/cat.jpg
 (echo -n '{"file": "'; base64 $IMAGE_FILE; echo '"}') | \
 curl -H "Content-Type: application/json" \
      -d @- http://127.0.0.1:8080/vgg16_cifar10
 ```
-````
 
 #### Using Python:
 
