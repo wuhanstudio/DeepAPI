@@ -244,6 +244,7 @@ $(document).ready(function() {
         else {
             noProb = 1;
         }
+        check();
     });
 
     // Copy to clipboard
