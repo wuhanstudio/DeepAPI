@@ -188,7 +188,7 @@ res = classification("T_URL", "T_FILE")
 
 # Print Prediction
 for i in res['predictions']:
-    print('{:<15s}{:.5f}'.format(i['label'], i['probability']))
+    print('{:<15s}{:5s}'.format(i['label'], format(i['probability'], 'f') if 'probability' in i else '-'))
 </code></pre>
                     </div>
 
