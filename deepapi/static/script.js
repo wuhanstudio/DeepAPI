@@ -81,6 +81,7 @@ function refresh() {
 function recognize() {
     var base64str = $('.drag-area img').attr('src');
     var base64str = base64str.replace('data:image/jpeg;base64,', '');
+    var base64str = base64str.replace('data:image/png;base64,', '');
 
     $.ajax
     ({
