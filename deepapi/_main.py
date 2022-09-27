@@ -79,33 +79,45 @@ def main_cli():
     parser.add_argument('--vgg16_imagenet', dest='vgg16_imagenet', action='store_true', help='Enable VGG16 model pre-trained on ImageNet.')
     parser.add_argument('--resnet50_imagenet', dest='resnet50_imagenet', action='store_true', help='Enable ResNet50 model pre-trained on ImageNet.')
     parser.add_argument('--inceptionv3_imagenet', dest='inceptionv3_imagenet', action='store_true', help='Enable InceptionV3 model pre-trained on ImageNet.')
-    parser.add_argument('--all', dest='all', action='store_true', help='Enable all models.')
 
     # Only activate VGG16 Cifar10 by default
-    parser.set_defaults(vgg16_cifar10=True)
+    parser.set_defaults(vgg16_cifar10=False)
     parser.set_defaults(vgg16_imagenet=False)
     parser.set_defaults(resnet50_imagenet=False)
     parser.set_defaults(inceptionv3_imagenet=False)
-    parser.set_defaults(all=True)
 
     args = parser.parse_args()
+
+    models = []
+
+    if args.vgg16_cifar10:
+        models.append("vgg16_cifar10")
+    
+    if args.vgg16_imagenet:
+        models.append("vgg16_imagenet")
+    
+    if args.resnet50_imagenet:
+        models.append("resnet50_imagenet")
+
+    if args.inceptionv3_imagenet:
+        models.append("inceptionv3_imagenet")
 
     # Import Keras models
     global m_inceptionv3, m_resnet50, m_vgg16, m_vgg16_cifar10
 
-    if args.vgg16_cifar10 or args.all:
+    if "vgg16_cifar10" in models or len(models) == 0:
         from deepapi.models.vgg16 import VGG16Cifar10, VGG16ImageNet
         m_vgg16_cifar10     = VGG16Cifar10()
     
-    if args.vgg16_imagenet or args.all:
+    if "vgg16_imagenet" in models or len(models) == 0:
         from deepapi.models.vgg16 import VGG16ImageNet
         m_vgg16             = VGG16ImageNet()
 
-    if args.resnet50_imagenet or args.all:
+    if "resnet50_imagenet" in models or len(models) == 0:
         from deepapi.models.resnet50 import ResNet50ImageNet
         m_resnet50          = ResNet50ImageNet()
         
-    if args.inceptionv3_imagenet or args.all:
+    if "inceptionv3_imagenet" in models or len(models) == 0:
         from deepapi.models.inceptionv3 import InceptionV3ImageNet
         m_inceptionv3       = InceptionV3ImageNet()
 
