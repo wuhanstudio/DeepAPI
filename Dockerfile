@@ -15,4 +15,4 @@ EXPOSE 8080
 
 ENTRYPOINT [ "python" ]
 
-CMD ["-m", "deepapi", "--all" ]
+CMD ["-m", "deepapi"]
