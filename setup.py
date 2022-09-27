@@ -1,7 +1,7 @@
 
 import codecs
 import os
-
+import glob
 import setuptools
 
 with open("README.md", "r") as fh:
@@ -18,6 +18,9 @@ def get_version(rel_path):
             delim = '"' if '"' in line else "'"
             return line.split(delim)[1]
     raise RuntimeError("Unable to find version string.")
+
+data_files = glob.glob('deepapi/static/*')
+print(data_files)
 
 install_requires = [
     "flask",
@@ -45,6 +48,7 @@ setuptools.setup(
     url="https://github.com/wuhanstudio/deepapi",
     license="MIT",
     install_requires=install_requires,
+    data_files=[(os.path.join('_lib', 'runtime'), data_files)],
     extra_require = {
         "dev": [
             "pytest>=3.6",
