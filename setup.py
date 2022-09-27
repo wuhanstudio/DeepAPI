@@ -50,9 +50,6 @@ setuptools.setup(
     install_requires=install_requires,
     data_files=[(os.path.join('_lib', 'runtime'), data_files)],
     extra_require = {
-        "dev": [
-            "pytest>=3.6",
-        ]
     },
     entry_points={
           'console_scripts': [
@@ -72,6 +69,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Topic :: Software Development :: Libraries",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
