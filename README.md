@@ -22,25 +22,26 @@ This project provides pre-trained deep learning models as a cloud API service. A
 
 ### Quick Start
 
+#### Using Docker:
+
+CPU:
+
+```
+docker run -p 8080:8080 wuhanstudio/deepapi
+```
+
+GPU:
+
+```
+docker run -p 8080:8080 wuhanstudio/deepapi:gpu
+```
+
 #### Python 3:
 
 ```
-$ pip3 install -r requirements.txt
-$ python main.py
-```
-
-#### Anaconda:
-
-```
-$ conda env create -f environment.yml
-$ conda activate cloudapi
-$ python main.py
-```
-
-#### Using Docker:
-
-```
-docker run -p 8080:8080 wuhanstudio/deep-api
+$ pip instlal deepapi
+# By default, we enable all models on the server.
+$ deepapi
 ```
 
 Navigate to https://localhost:8080

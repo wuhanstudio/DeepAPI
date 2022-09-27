@@ -1,4 +1,4 @@
-name: cloudapi
+name: deepapi
 channels:
   - defaults
 dependencies:

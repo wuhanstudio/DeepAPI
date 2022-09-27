@@ -1,6 +1,9 @@
 from tensorflow.keras.applications.inception_v3 import InceptionV3
-from tensorflow.keras.applications.inception_v3 import preprocess_input, decode_predictions
+from tensorflow.keras.applications.inception_v3 import preprocess_input
+
 import numpy as np
+
+from deepapi.dataset.imagenet import decode_predictions
 
 class InceptionV3ImageNet:
     def __init__(self):

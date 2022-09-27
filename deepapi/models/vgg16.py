@@ -6,7 +6,7 @@ from keras import regularizers
 import os
 from keras.utils.data_utils import get_file
 
-cifar10_labels = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+from deepapi.dataset.cifar10 import cifar10_labels
 
 class VGG16Cifar10:
     def __init__(self,train=False):
@@ -23,7 +23,10 @@ class VGG16Cifar10:
                 os.getenv('MODEL_URL'))
             self.model.load_weights(weights_path)
         else:
-            self.model.load_weights('cifar10vgg.h5')
+            weights_path = get_file(
+                'cifar10vgg.h5',
+                "https://dl.wuhanstudio.cc/cifar10vgg.h5")
+            self.model.load_weights(weights_path)
 
         # self.model.summary()
 
@@ -130,8 +133,10 @@ class VGG16Cifar10:
         return sorted(results, key=lambda tup: tup[2], reverse=True)[0: top]
 
 from tensorflow.keras.applications.vgg16 import VGG16
-from tensorflow.keras.applications.vgg16 import preprocess_input, decode_predictions
+from tensorflow.keras.applications.vgg16 import preprocess_input
 import numpy as np
+
+from deepapi.dataset.imagenet import decode_predictions
 
 class VGG16ImageNet:
     def __init__(self):

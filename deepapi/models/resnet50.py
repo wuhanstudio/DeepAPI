@@ -1,6 +1,8 @@
 from tensorflow.keras.applications.resnet50 import ResNet50
-from tensorflow.keras.applications.resnet50 import preprocess_input, decode_predictions
+from tensorflow.keras.applications.resnet50 import preprocess_input
 import numpy as np
+
+from deepapi.dataset.imagenet import decode_predictions
 
 class ResNet50ImageNet:
     def __init__(self):

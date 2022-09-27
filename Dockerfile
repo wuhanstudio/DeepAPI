@@ -9,8 +9,10 @@ RUN pip install -r requirements.txt
 
 COPY . /app
 
+RUN pip install -e .
+
 EXPOSE 8080
 
 ENTRYPOINT [ "python" ]
 
-CMD [ "main.py", "--all" ]
+CMD ["-m", "deepapi", "--all" ]
