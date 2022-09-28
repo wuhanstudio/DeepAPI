@@ -24,6 +24,7 @@ $ pip instlal deepapi
 # Use deepapi -h to see more options.
 
 $ deepapi
+Serving on port 8080...
 ```
 
 The website and API service are available at https://localhost:8080.
