@@ -23,7 +23,7 @@ $ pip instlal deepapi
 # By default, we enable all models on the server.
 # Use deepapi -h to see more options.
 
-$ deepapi
+$ python -m deepapi
 Serving on port 8080...
 ```
 
