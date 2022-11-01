@@ -31,11 +31,33 @@ The website and API service are available at https://localhost:8080.
 
 
 
-### API Client
+### DeepAPI Client
 
-To initiate **black-box adversarial attacks**, we can get predictions by sending a POST request to http://127.0.0.1:8080/vgg16_cifar10 without knowing details about deep learning models behind the cloud service.
+To initiate **black-box adversarial attacks**, we can get predictions by sending a POST request to http://localhost:8080/vgg16_cifar10 without knowing details about deep learning models behind the cloud service.
 
-#### Using Python:
+```
+import numpy as np
+from PIL import Image
+
+from deepapi.api import DeepAPI_VGG16_Cifar10
+
+# Load the image
+x = Image.open("dog.jpg")
+x = np.array(x)
+
+# Initialize the model
+model  = DeepAPI_VGG16_Cifar10('http://localhost:8080', concurrency=8)
+
+# Predict
+y = model.predict(np.array([x]))[0]
+
+# Print the result
+model.print(y)
+```
+
+### Using Python:
+
+You can also implement the API client from scratch using the request module.
 
 ```
 def classification(url, file):
