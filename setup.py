@@ -33,7 +33,6 @@ install_requires = [
     "pillow",
     "requests",
     "tensorflow",
-    "tensorflow-estimator",
     "setuptools",
 ]
 
