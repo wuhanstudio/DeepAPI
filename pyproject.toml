@@ -13,23 +13,39 @@ requires = ["setuptools>=61.0",
 ]
 build-backend = "setuptools.build_meta"
 
-[project.scripts]
-deepapi = "deepapi._main:main"
-
 [project]
 name = "deepapi"
 version = "0.4.1"
 authors = [
   { name="wuhanstudio", email="wuhanstudios@gmail.com" },
 ]
+maintainers = [
+  { name="wuhanstudio", email="wuhanstudios@gmail.com" },
+]
 description = "Deep Learning as a Cloud API Service."
 readme = "README.md"
+license = {text = "MIT License"}
 requires-python = ">=3.6"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+dependencies = ["setuptools>=61.0",
+            "flask",
+            "waitress",
+            "grpcio",
+            "h5py",
+            "keras",
+            "keras-preprocessing",
+            "numpy",
+            "pillow",
+            "requests",
+            "tensorflow",
+]
+
+[project.scripts]
+deepapi = "deepapi._main:main"
 
 [project.urls]
 "Homepage" = "https://github.com/wuhanstudio/deepapi"
