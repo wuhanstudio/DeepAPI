@@ -55,7 +55,21 @@ y = model.predict(np.array([x]))[0]
 model.print(y)
 ```
 
-### Using Python:
+</details>
+<details>
+  <summary><h3> Using Curl</h3></summary>
+
+```
+export IMAGE_FILE=test/cat.jpg
+(echo -n '{"file": "'; base64 $IMAGE_FILE; echo '"}') | \
+curl -H "Content-Type: application/json" \
+     -d @- http://127.0.0.1:8080/vgg16_cifar10
+```
+</details>
+
+
+<details>
+  <summary><h3> Using Python Request</h3></summary>
 
 You can also implement the API client from scratch using the request module.
 
@@ -107,13 +121,4 @@ Sending requests
 ------ end ------
 Concurrent Requests: 5
 Total Runtime: 2.441638708114624
-```
-
-#### Using curl:
-
-```
-export IMAGE_FILE=test/cat.jpg
-(echo -n '{"file": "'; base64 $IMAGE_FILE; echo '"}') | \
-curl -H "Content-Type: application/json" \
-     -d @- http://127.0.0.1:8080/vgg16_cifar10
 ```
