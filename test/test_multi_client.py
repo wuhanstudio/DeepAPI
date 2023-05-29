@@ -16,7 +16,12 @@ import base64
 def classification(url, file):
 
     # load the input image and construct the payload for the request
-    image = Image.open(file)
+    try:
+        image = Image.open(file)
+    except Exception as e:
+        print(e)
+        return
+
     buff = BytesIO()
     image.save(buff, format="JPEG")
 
@@ -40,9 +45,10 @@ def task(url, file):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Distributed Image Classification API')
     parser.add_argument(
-        'image',
+        '--image',
         type=str,
-        help='image file'
+        help='image file',
+        default='cat.jpg'
     )
     parser.add_argument(
         '--url',
@@ -86,6 +92,11 @@ if __name__ == '__main__':
         start_time = time.time()
         for future in concurrent.futures.as_completed(futures):
             r, data = future.result()
+
+            if r is None:
+                print('No response')
+                continue
+
             if(r['success']):
                 if no_prob:
                     print ('{:<15s}'.format(r['predictions'][0]['label']))
@@ -94,6 +105,7 @@ if __name__ == '__main__':
                     print ('{:<15s}{:.5f}'.format(r[0]['label'], r[0]['probability']))
             else:
                 print(r['error'])
+
         print('------ end ------')
 
         print('Concurrent Requests: ' + str(num_workers))

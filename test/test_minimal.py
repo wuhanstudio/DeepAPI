@@ -13,7 +13,12 @@ import argparse
 def classification(url, file):
 
     # Load the input image and construct the payload for the request
-    image = Image.open(file)
+    try:
+        image = Image.open(file)
+    except Exception as e:
+        print(e)
+        return
+
     buff = BytesIO()
     image.save(buff, format="JPEG")
 
@@ -24,6 +29,12 @@ def classification(url, file):
 
 
 parser = argparse.ArgumentParser(description='Distributed Image Classification Client')
+parser.add_argument(
+    '--image',
+    type=str,
+    help='image file',
+    default='cat.jpg'
+)
 parser.add_argument(
     '--url',
     type=str,
@@ -51,7 +62,11 @@ args = parser.parse_args()
 
 no_prob = 1 if args.no_prob else 0;
 
-res = classification(args.url + '/' + args.model + '?top=' + str(args.top) + '&no-prob=' + str(no_prob), 'cat.jpg')
+res = classification(args.url + '/' + args.model + '?top=' + str(args.top) + '&no-prob=' + str(no_prob), args.image)
+
+if res is None:
+    print('No response')
+    exit()
 
 # Print prediction results
 if res['success']:
