@@ -4,7 +4,9 @@ var myChart = new Chart(
         type: 'bar',
         data: [],
         options: {
+            responsive: true,
             indexAxis: 'y',
+            maintainAspectRatio: false,
         }
     }
 );
