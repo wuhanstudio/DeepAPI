@@ -20,6 +20,9 @@ docker run -p 8080:8080 wuhanstudio/deepapi
 ```
 $ pip install deepapi
 
+# For development
+# python setup.py develop
+
 # By default, we enable all models on the server.
 # Use deepapi -h to see more options.
 
